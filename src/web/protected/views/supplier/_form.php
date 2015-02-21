@@ -62,7 +62,8 @@
                         'htmlOptions'=>array(
                             'size'=>'10', // textField size
                             'maxlength'=>'10', // textField maxlength
-                            'required'=>'required'
+                            'required'=>'required',
+                            'placeholder'=>'Año-Mes-Dia'
                            // 'readonly'=>'readonly'
                             )
                         )

@@ -10,6 +10,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Lista de Productos', 'url'=>array('index')),
 	array('label'=>'Admin. Productos', 'url'=>array('admin')),
+	array('label'=>'Crear Proveedor', 'url'=>array('/supplier/create')),
 );
 ?>
 

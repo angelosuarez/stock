@@ -85,9 +85,10 @@ div.form span.required
 
 div.form div.error label:first-child,
 div.form label.error,
-div.form span.error
+div.form span.error,
+div.form div.error a
 {
-	color: #C00;
+	color: rgb(169, 68, 66);
 }
 
 div.form div.error input,
@@ -97,8 +98,8 @@ div.form input.error,
 div.form textarea.error,
 div.form select.error
 {
-	background: #FEE;
-	border-color: #C00;
+	background: rgb(242, 222, 222);
+	border-color: rgb(169, 68, 66);
 }
 
 div.form div.success input,
@@ -112,9 +113,10 @@ div.form select.success
 	border-color: #C6D880;
 }
 
-div.form div.success label
+div.form div.success label,
+div.form div.success a 
 {
-	color: inherit;
+	color: #5bb75b;
 }
 
 div.form .errorSummary

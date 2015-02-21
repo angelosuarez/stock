@@ -12,11 +12,6 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'name'); ?>
 		<?php echo $form->textField($model,'name',array('size'=>50,'maxlength'=>50)); ?>
 	</div>
@@ -63,7 +58,25 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'contrat_date'); ?>
-		<?php echo $form->textField($model,'contrat_date'); ?>
+		<?php 
+                    $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                        'model'=>$model,
+                        'attribute'=>'contrat_date',
+                        'options'=>array(
+                            'dateFormat'=>'yy-mm-dd',
+                            'maxDate'=> "-0D", //fecha maxima
+                            ),
+                        'htmlOptions'=>array(
+                            'size'=>'10', // textField size
+                            'maxlength'=>'10', // textField maxlength
+                            'required'=>'required',
+                            'placeholder'=>'Año-Mes-Dia'
+                           // 'readonly'=>'readonly'
+                            
+                            )
+                        )
+                    ); 
+                ?>
 	</div>
 
 	<div class="row buttons">

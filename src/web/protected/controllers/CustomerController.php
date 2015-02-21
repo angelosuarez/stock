@@ -1,6 +1,6 @@
 <?php
 
-class UsersController extends Controller
+class CustomerController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -27,27 +27,28 @@ class UsersController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow admin user to perform 'update' and 'delete' actions
-				'actions'=>array('error'),
-				'users'=>array("*"),    
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view','admin', 'error'),
+				'users'=>array('*'),
 			),
-			array('allow', // allow admin user to perform 'update' and 'delete' actions
-				'actions'=>array('delete','update','index','view','admin', 'create'),
-				'users'=>Users::usersByType(1),    
+                        array('allow', // allow admin user to perform 'update' and 'delete' actions
+				'actions'=>array('delete','update'),
+				'users'=>Users::usersByType(1),
+                                
 			),
-			array('allow', // allow admin user to perform 'update' and 'delete' actions
-				'actions'=>array('delete','update','index','view','admin', 'create'),
-				'users'=>Users::usersByType(2),    
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>Users::usersByType(2),
 			),
-			array('deny', // allow admin user to perform 'update' and 'delete' actions
-				'actions'=>array('delete','update','index','view','admin', 'create'),
-				'users'=>Users::usersByType(3),    
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create'),
+				'users'=>Users::usersByType(3),
 			),
-			array('deny', // allow admin user to perform 'update' and 'delete' actions
-				'actions'=>array('delete','update','index','view','admin', 'create'),
-				'users'=>Users::usersByType(4),    
+			
+			array('deny',  // deny all users
+                                'actions'=>array('delete','update'),
+				'users'=>Users::usersByType(3)
 			),
-
 		);
 	}
 
@@ -68,30 +69,19 @@ class UsersController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Users;
+		$model=new Customer;
 
 		// Uncomment the following line if AJAX validation is needed
-		 $this->performAjaxValidation($model);
+		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Users']))
+		if(isset($_POST['Customer']))
 		{
-                        $exist=Users::getUsernameExist($_POST['Users']['username']);
+                        $exist=Customer::getCustomerExist($_POST['Customer']['id_doc']);
                         if($exist==NULL)
                         {
-                            $model->name=$_POST['Users']['name'];
-                            $model->lastname=$_POST['Users']['lastname'];
-                            $model->phone=$_POST['Users']['phone'];
-                            $model->username=$_POST['Users']['username'];
-                            $model->password=md5($_POST['Users']['password']);
-                            $model->email=$_POST['Users']['email'];
-                            $model->status=$_POST['Users']['status'];
-                            $model->id_type_of_user=$_POST['Users']['id_type_of_user'];
-                            $model->superuser=TRUE;
-                            $model->create_at=date("Y-m-d");
-                            $model->lastvisit_at=date("Y-m-d");
-                            $model->activkey='1d6ccd492bc1a2da9fea83c081d06131';
-                            if($model->save())
-                                    $this->redirect(array('view','id'=>$model->id));
+                                $model->attributes=$_POST['Customer'];
+                                if($model->save())
+                                        $this->redirect(array('view','id'=>$model->id));
                         }else{
                             $this->redirect("error");
                         }
@@ -103,7 +93,7 @@ class UsersController extends Controller
         
         public function actionError()
         {
-            $this->render('error', array('link'=>'Volver a Crear Usuario','action'=>'create', 'message'=>"El usuario que intenta crear ya se encuentra registrado..."));
+            $this->render('error', array('link'=>'Volver a Crear Clientes','action'=>'create', 'message'=>"La cédula que inenta registrar pertenece a otro cliente"));
         }
 	/**
 	 * Updates a particular model.
@@ -117,11 +107,9 @@ class UsersController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Users']))
+		if(isset($_POST['Customer']))
 		{
-			$model->attributes=$_POST['Users'];
-                        if($_POST['Users']['new_password']!="")
-                            $model->password=md5($_POST['Users']['new_password']);
+			$model->attributes=$_POST['Customer'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -150,7 +138,7 @@ class UsersController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Users');
+		$dataProvider=new CActiveDataProvider('Customer');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -161,10 +149,10 @@ class UsersController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Users('search');
+		$model=new Customer('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Users']))
-			$model->attributes=$_GET['Users'];
+		if(isset($_GET['Customer']))
+			$model->attributes=$_GET['Customer'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -175,12 +163,12 @@ class UsersController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Users the loaded model
+	 * @return Customer the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Users::model()->findByPk($id);
+		$model=Customer::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -188,11 +176,11 @@ class UsersController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Users $model the model to be validated
+	 * @param Customer $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='users-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='customer-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

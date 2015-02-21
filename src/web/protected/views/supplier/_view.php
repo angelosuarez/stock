@@ -23,8 +23,8 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('vendor_name')); ?>:</b>
 	<?php echo CHtml::encode($data->vendor_name); ?>
 	<br />
-
-	<?php /*
+	<br />
+        
 	<b><?php echo CHtml::encode($data->getAttributeLabel('vendor_last_name')); ?>:</b>
 	<?php echo CHtml::encode($data->vendor_last_name); ?>
 	<br />
@@ -41,6 +41,6 @@
 	<?php echo CHtml::encode($data->contrat_date); ?>
 	<br />
 
-	*/ ?>
+	
 
 </div>

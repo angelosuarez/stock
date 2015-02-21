@@ -1196,9 +1196,10 @@ input[type="file"] {
 }
 
 select {
-  width: 220px;
+  width: 217px;
   background-color: #ffffff;
   border: 1px solid #cccccc;
+  height: 36px;
 }
 
 select[multiple],

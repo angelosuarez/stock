@@ -154,6 +154,8 @@ class SiteController extends Controller
                                                     array('label' => 'Proveedores', 'url' => '/supplier/admin'),
                                                 )
                                 ));
+                array_push($return, array('label' => 'Clientes', 'url' => '/customer/admin'));
+                
 //                array_push($return, array('label' => 'Servicios', 
 //                                      'url' => '#', 
 //                                      'items' =>array(

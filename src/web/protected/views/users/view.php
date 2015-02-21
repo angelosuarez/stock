@@ -23,7 +23,10 @@ $this->menu=array(
         'htmlOptions'=>array('class'=>'table table-hover'),
 	'attributes'=>array(
 //		'id',
-		'username',
+//		'username',
+		'name',
+		'lastname',
+		'phone',
 //		'password',
 		'email',
 //		'activkey',

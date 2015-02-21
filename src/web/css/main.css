@@ -132,6 +132,11 @@ div.form .rememberMe label
         width: 116%!important;
 }
 
+.list-view .items 
+{
+    width: 140%;
+}
+
 div.view
 {
 	padding: 10px;
@@ -140,6 +145,8 @@ div.view
         display: -webkit-inline-box;
         transition: background;
         transition-duration: 1s;
+        max-width: 232px;
+        position: inherit;
 }
 div.view:hover
 {
@@ -336,4 +343,12 @@ div.search-form
     /*display: -webkit-inline-box;*/
     z-index: 1500;
 }
+.close
+{
+    display:none!important;
+}
 
+form a:hover, form a:focus 
+{
+    text-decoration: none;
+}

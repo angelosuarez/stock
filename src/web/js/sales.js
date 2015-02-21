@@ -16,7 +16,7 @@ $SALES.UI=(function()
             _ready();
             _clickElement();
             _changeElement();
-            
+            _focusElement();
 	}
         /* @type type 
         * start app
@@ -28,7 +28,8 @@ $SALES.UI=(function()
         
         function _clickElement() 
         {
-            $('#startSesion, label#newBikeCustomer,label#newCustomer, div#customer_existence img#update').on('click',function(e)
+            $('#startSesion, label#newBikeCustomer,label#newCustomer, div#customer_existence img#update, \n\
+               #change_password').on('click',function(e)
             {
                 e.preventDefault();
                 switch ($(this).attr("id"))
@@ -49,12 +50,28 @@ $SALES.UI=(function()
                         console.log("ajaaaa");
                         $SALES.AJAX.send("GET","/Customer/New",null,$(this).attr("id")); 
                         break;
+                    case "change_password":
+                        console.log("ajaaaa");
+                        $("div.newPassword input").val("");
+                        if($("div.newPassword").attr("id")=="close"){
+                            $(this).html("Mantener Contraseña");
+                            $("div.newPassword").removeClass("close").removeAttr("id", "close");
+                            $("div.newPassword input").attr("required", "required");
+                            console.log("tiene attr close");
+                        }else{
+                            $(this).html("Cambiar Contraseña");
+                            $("div.newPassword").addClass("close").attr("id", "close");
+                            $("div.newPassword input").removeAttr("required");
+                            console.log("no tiene attr close");
+                        }
+                        break;
                 }   
             });
         }
         function _changeElement() 
         {
-            $('input#Product_price,input#Product_total_price,input#Service_price,input#Service_total_price, div#customer_existence input#Customer_id_doc').change(function()
+            $('input#Product_price,input#Product_total_price,input#Service_price,input#Service_total_price, div#customer_existence input#Customer_id_doc, \n\
+               input#Users_confirm_new_password').change(function()
             {
                 console.log($(this).val());
                 switch ($(this).attr("id"))
@@ -66,12 +83,40 @@ $SALES.UI=(function()
                         else
                             total.val( ( parseFloat(price.val() * tax) + parseFloat(price.val()) ).toFixed(2) );
                         break;
+                    case "Users_confirm_new_password":         
+                        if($("#Users_new_password").val() != $("#Users_confirm_new_password").val() || $("#Users_confirm_new_password").val()=="" || $("#Users_new_password").val()==""){
+                            $("#Users_confirm_new_password").parent().children()[0].innerHTML="Las Contraseñas No Son Iguales";
+                            $(".newPassword").removeClass("success").addClass("error");
+                            $(".newPassword a").html("&nbsp; ! ");
+                            console.log("no son iguales");
+                        }else{
+                            $("#Users_confirm_new_password").parent().children()[0].innerHTML="Confirmar Nueva Contraseña";
+                            $(".newPassword").removeClass("error").addClass("success");
+                            $(".newPassword a").html("&nbsp; ✔ ");
+                            console.log("fino!!!");
+                        }
+                        break;
 //                    case "Customer_id_doc":
 //                        if($("#Customer_id_doc").val()!="")
 //                            $SALES.AJAX.send("GET","/Customer/CheckCustomer",$("#Customer_id_doc").serialize(),$(this).attr("id")); 
 //                        else
 //                            console.log("el input esta vacio");
 //                        break;
+                }   
+            });
+        }
+        function _focusElement() 
+        {
+            $('input#Users_confirm_new_password, input#Users_new_password').focus(function()
+            {
+                console.log($(this).val());
+                switch ($(this).attr("id"))
+                {
+                    case "Users_confirm_new_password":         
+                    case "Users_new_password":         
+                        $(".newPassword").removeClass("success");
+                        $(".newPassword a").html("&nbsp; &#9658; ");
+                        break;
                 }   
             });
         }

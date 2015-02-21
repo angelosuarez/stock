@@ -128,4 +128,18 @@ class Product extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        public static function getName($id){           
+            return self::model()->find("id=:id", array(':id'=>$id))->name;
+        }
+        public static function getDataCustomer($idDoc){           
+            return self::model()->find("id_doc=:id_doc", array(':id_doc'=>$idDoc));
+        }
+        public static function checkExist($modelForm)
+        {
+            $customer= self::model()->find("name=:name and last_name=:lastName and id_doc=:idDoc", array("name"=>$modelForm["name"], "lastName"=>$modelForm["last_name"], "idDoc"=>$modelForm["id_doc"]));
+            if($customer==NULL)
+                return self::model()->find("id_doc=".$modelForm["id_doc"]); 
+            else
+                return $customer;
+        }
 }

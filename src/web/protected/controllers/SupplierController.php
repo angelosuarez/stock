@@ -41,6 +41,10 @@ class SupplierController extends Controller
 				'actions'=>array('create','update'),
 				'users'=>Users::usersByType(2),
 			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create'),
+				'users'=>Users::usersByType(3),
+			),
 			
 			array('deny',  // deny all users
                                 'actions'=>array('delete','update'),
