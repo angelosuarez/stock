@@ -5,6 +5,7 @@
 		<?php echo $content; ?>
 	</div><!-- content -->
 </div>
+
 <div class="span-5 last">
 	<div class="right-menu" id="sidebar">
 	<?php
@@ -15,8 +16,19 @@
 			'items'=>$this->menu,
 			'htmlOptions'=>array('class'=>'operations'),
 		));
-		$this->endWidget();
 	?>
+            
 	</div><!-- sidebar -->
 </div>
+
+<?php
+$this->endWidget();
+?>
+
+<div class="span-24">
+<?php
+    $this->extra;
+?>
+</div>
+
 <?php $this->endContent(); ?>

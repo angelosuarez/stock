@@ -28,7 +28,7 @@ class ProductController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','admin'),
+				'actions'=>array('index','view','admin', 'getDataById'),
 				'users'=>array('*'),
 			),
                         array('allow', // allow admin user to perform 'update' and 'delete' actions
@@ -77,7 +77,7 @@ class ProductController extends Controller
 
 		if(isset($_POST['Product']))
 		{
-			$model->attributes=$_POST['Product'];
+			$model->attributes=array_map('strtoupper',$_POST['Product']);
                         $model->register_date=date("Y-m-d");
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
@@ -102,7 +102,7 @@ class ProductController extends Controller
 
 		if(isset($_POST['Product']))
 		{
-			$model->attributes=$_POST['Product'];
+			$model->attributes=array_map('strtoupper',$_POST['Product']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -178,5 +178,20 @@ class ProductController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+	public function actionGetDataById()
+	{
+            $params=array();
+            $params["brand"]=$params["model"]=$params["stock"]=$params["price"]=" - ";
+            if(isset($_GET["BikeCustomer"]["id_product"]))
+            {
+                $productId=$_GET["BikeCustomer"]["id_product"];
+                $detailProduct=Product::getData($productId);
+                $params["brand"]=$detailProduct->brand;
+                $params["model"]=$detailProduct->model;
+                $params["stock"]=$detailProduct->quantity;
+                $params["price"]=$detailProduct->total_price;
+            }
+            echo json_encode($params);
 	}
 }

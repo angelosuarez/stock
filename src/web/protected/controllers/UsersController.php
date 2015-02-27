@@ -78,10 +78,10 @@ class UsersController extends Controller
                         $exist=Users::getUsernameExist($_POST['Users']['username']);
                         if($exist==NULL)
                         {
-                            $model->name=$_POST['Users']['name'];
-                            $model->lastname=$_POST['Users']['lastname'];
+                            $model->name=strtoupper($_POST['Users']['name']);
+                            $model->lastname=strtoupper($_POST['Users']['lastname']);
                             $model->phone=$_POST['Users']['phone'];
-                            $model->username=$_POST['Users']['username'];
+                            $model->username=strtoupper($_POST['Users']['username']);
                             $model->password=md5($_POST['Users']['password']);
                             $model->email=$_POST['Users']['email'];
                             $model->status=$_POST['Users']['status'];
@@ -120,6 +120,9 @@ class UsersController extends Controller
 		if(isset($_POST['Users']))
 		{
 			$model->attributes=$_POST['Users'];
+                        $model->name=strtoupper($_POST['Users']['name']);
+                        $model->lastname=strtoupper($_POST['Users']['lastname']);
+                        $model->username=strtoupper($_POST['Users']['username']);
                         if($_POST['Users']['new_password']!="")
                             $model->password=md5($_POST['Users']['new_password']);
 			if($model->save())

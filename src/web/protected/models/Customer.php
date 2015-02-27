@@ -19,6 +19,13 @@
  */
 class Customer extends CActiveRecord
 {
+        public $id_brand_bike;
+        public $id_model_bike;
+        public $id_colour;
+        public $plate;
+        public $year_bike;
+        public $new_brand_bike;
+        public $new_model_bike;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -72,6 +79,13 @@ class Customer extends CActiveRecord
 			'phone_movil' => 'Tlf. Movil',
 			'email' => 'Correo Electónico',
 			'status' => 'Estatus',
+                        'id_brand_bike' => 'Marca',
+			'id_model_bike' => 'Modelo',
+			'id_colour' => 'Color',
+			'plate' => 'Placa',
+			'year_bike' => 'Año',
+			'new_brand_bike' => 'Nueva Marca',
+			'new_model_bike' => 'Nuevo Modelo',
 		);
 	}
 
@@ -121,5 +135,16 @@ class Customer extends CActiveRecord
         
         public static function getCustomerExist($docId){           
             return self::model()->find("id_doc=:docId", array(':docId'=>$docId));
+        }
+        public static function getData($id){           
+            return self::model()->find("id=:id", array(':id'=>$id));
+        }
+        public static function getList()
+	{
+		return CHtml::listData(self::model()->findAll(array('order' => 'name')), 'id', 'name');
+	}
+        public static function testing()
+	{
+                return self::model()->findAll();
         }
 }

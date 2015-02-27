@@ -77,7 +77,7 @@ class SupplierController extends Controller
 
 		if(isset($_POST['Supplier']))
 		{
-			$model->attributes=$_POST['Supplier'];
+			$model->attributes=array_map('strtoupper',$_POST['Supplier']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -101,7 +101,7 @@ class SupplierController extends Controller
 
 		if(isset($_POST['Supplier']))
 		{
-			$model->attributes=$_POST['Supplier'];
+			$model->attributes=array_map('strtoupper',$_POST['Supplier']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

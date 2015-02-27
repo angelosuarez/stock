@@ -139,6 +139,7 @@ class SiteController extends Controller
                 switch ($userType) {
                     //ADMINISTRADOR...
                     case 1:
+                    array_push($return, array('label' => 'Admin. Sistema',  'url' => '/gii/',  ));
                     array_push($return, array('label' => 'Usuarios',  'url' => '/Users/admin',  ));
                         break;
                     //GERENTE...
@@ -154,8 +155,10 @@ class SiteController extends Controller
                                                     array('label' => 'Proveedores', 'url' => '/supplier/admin'),
                                                 )
                                 ));
-                array_push($return, array('label' => 'Clientes', 'url' => '/customer/admin'));
                 
+                array_push($return, array('label' => 'Servicios', 'url' => '/service/admin'));
+                array_push($return, array('label' => 'Clientes', 'url' => '/customer/admin'));
+                array_push($return, array('label' => 'Cuentas Abiertas', 'url' => '/bikeCustomer/index'));
 //                array_push($return, array('label' => 'Servicios', 
 //                                      'url' => '#', 
 //                                      'items' =>array(

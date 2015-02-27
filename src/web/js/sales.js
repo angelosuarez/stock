@@ -29,7 +29,7 @@ $SALES.UI=(function()
         function _clickElement() 
         {
             $('#startSesion, label#newBikeCustomer,label#newCustomer, div#customer_existence img#update, \n\
-               #change_password').on('click',function(e)
+               #change_password, img#deallocate, p#newModel, p#newBrand, a#back, a#confirmNewModelBrand').on('click',function(e)
             {
                 e.preventDefault();
                 switch ($(this).attr("id"))
@@ -50,6 +50,13 @@ $SALES.UI=(function()
                         console.log("ajaaaa");
                         $SALES.AJAX.send("GET","/Customer/New",null,$(this).attr("id")); 
                         break;
+                    case "deallocate":
+                        var obj=$(this).parent().parent();
+                        var controller=$(this).attr("class");
+                        if(controller==undefined)var controller=""; 
+                        $SALES.AJAX.send("GET",controller+"/deallocate","idBikeCustomer="+obj.attr("id"),obj.attr("id")); 
+                        obj.remove();
+                        break;
                     case "change_password":
                         console.log("ajaaaa");
                         $("div.newPassword input").val("");
@@ -65,22 +72,48 @@ $SALES.UI=(function()
                             console.log("no tiene attr close");
                         }
                         break;
+                    case "newBrand":
+                        $(".new-brand-model").removeClass("close").show("slow");
+                        $(".new_brand").removeClass("close").show("slow");
+                        break;
+                    case "newModel":
+                        if($("#Customer_id_brand_bike").val()!="")
+                        {
+                            $("#Customer_id_brand_bike").removeClass("error");
+                            $(".new-brand-model").removeClass("close").show("slow");
+                            $(".new_brand").addClass("close").hide("fast");
+                        }else{
+                            $("#Customer_id_brand_bike").addClass("error");
+                        }
+                        
+                        break;
+                    case "back":
+                        $(".new-brand-model").hide("slow").addClass("close");
+                        $(".new-brand-model input").val("");
+                        break;
+                    case "confirmNewModelBrand":
+                         $SALES.AJAX.send("GET","/ModelBike/New",$("#Customer_id_brand_bike, #newBrandModel input").serialize(),"newBrandBike"); 
+                        break;
+                        
                 }   
             });
         }
+
         function _changeElement() 
         {
-            $('input#Product_price,input#Product_total_price,input#Service_price,input#Service_total_price, div#customer_existence input#Customer_id_doc, \n\
-               input#Users_confirm_new_password').change(function()
+            $('select#BikeDescription_id_brand_bike, select#Customer_id_brand_bike, input#Product_price,input#Product_total_price,input#Service_price,input#Service_total_price, div#customer_existence input#Customer_id_doc, \n\
+               input#Users_confirm_new_password, #BikeCustomer_id_product, #BikeCustomer_quantity').change(function()
             {
                 console.log($(this).val());
                 switch ($(this).attr("id"))
                 {
                     case "Product_price":case "Product_total_price":case "Service_price":case "Service_total_price":         
                         var tax=$("select#Product_tax,select#Service_tax").val()/100, total=$('input#Product_total_price,input#Service_total_price'), price=$("input#Product_price,input#Service_price");
-                        if(/total/.test($(this).attr("id")))
-                            price.val( ( parseFloat(total.val()) - parseFloat(total.val() * tax) ).toFixed(2) );
-                        else
+                        if(/total/.test($(this).attr("id"))){
+//                            price.val( ( parseFloat(total.val()) - parseFloat(total.val() * tax) ).toFixed(2) );
+                            price.val( ( ( parseFloat(total.val()) * parseFloat(total.val())) / (parseFloat(total.val()) + parseFloat(total.val() * tax)) ).toFixed(2) );
+//                            price.val( ( ( parseFloat(400) * parseFloat(400)) / (parseFloat(400) + ( parseFloat(400 * tax ))) ).toFixed(2) );
+                        }else
                             total.val( ( parseFloat(price.val() * tax) + parseFloat(price.val()) ).toFixed(2) );
                         break;
                     case "Users_confirm_new_password":         
@@ -94,6 +127,21 @@ $SALES.UI=(function()
                             $(".newPassword").removeClass("error").addClass("success");
                             $(".newPassword a").html("&nbsp; ✔ ");
                             console.log("fino!!!");
+                        }
+                        break;
+                    case "BikeDescription_id_brand_bike": case "Customer_id_brand_bike":         
+                        $SALES.AJAX.send("GET","/ModelBike/GetModelForBrand",$(this).serialize(),$(this).attr("id"));
+                        break;
+                    case "BikeCustomer_id_product":         
+                        $SALES.AJAX.send("GET","/Product/GetDataById",$(this).serialize(),$(this).attr("id"));
+                        break;
+                    case "BikeCustomer_quantity":  
+                        if( $(this).val() <= $("#BikeCustomer_stock").val() )
+                        {
+                            console.log("llegoooooooooo");
+                            $("button.btn").removeAttr("disabled").removeClass("disabled");
+                        }else{
+                            $("button.btn").attr("disabled","disabled").addClass("disabled");
                         }
                         break;
 //                    case "Customer_id_doc":
@@ -183,9 +231,9 @@ $SALES.UI=(function()
                         $("form#customer-form div.buttons input").attr("id","createCustomer");
                         $SALES.UI.whenAjax();
                         break;
-                    case "BikeDescription_id_brand_bike":       
+                    case "BikeDescription_id_brand_bike": case "Customer_id_brand_bike":        
                         console.log(data);
-                        $("#BikeDescription_id_model_bike").html(data);
+                        $("#BikeDescription_id_model_bike, #Customer_id_model_bike").html(data);
                         break;
                     case "createBikeCustomer": 
                         $SALES.AJAX.send("GET","/Customer/CheckCustomer",$("#Customer_id_doc").serialize(),"Customer_id_doc"); 
@@ -204,6 +252,23 @@ $SALES.UI=(function()
                         }if(obj.confirm=="2"){
                             $SALES.UI.msj("","");$SALES.UI.msjChange("<h2>Ya existe un cliente llamado: <b>"+obj.name+" "+obj.lastName+"</b> con la cedula: <b>"+obj.idDoc+"</b></h2>","stop.png",3000,"20px");
                         }
+                        console.log(data);
+                        break;
+                    case "newBrandBike":
+                        obj = JSON.parse(data);
+                        if(obj.brand!="")$("#Customer_id_brand_bike").append(obj.brand).val(obj.brandId);
+                        if(obj.model!="")$("#Customer_id_model_bike").append(obj.model).val(obj.modelId);
+                        $(".new-brand-model").hide("slow").addClass("close");
+                        $(".new-brand-model input").val("");
+                        console.log(data);
+                        break;
+                    case "BikeCustomer_id_product":
+                        obj = JSON.parse(data);
+                        $("#brand").html(obj.brand);
+                        $("#model").html(obj.model);
+                        $("#stock").html(obj.stock);
+                        $("#BikeCustomer_stock").val(obj.stock);
+                        $("#price").html(obj.price);
                         console.log(data);
                         break;
                     default:

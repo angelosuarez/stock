@@ -142,4 +142,12 @@ class Product extends CActiveRecord
             else
                 return $customer;
         }
+        public static function getList()
+	{
+		return CHtml::listData(self::model()->findAll(array('order' => 'name')), 'id', 'name', 'brand');
+	}
+        public static function getData($id)
+        {           
+            return self::model()->find("id=:id", array(':id'=>$id));
+        }
 }

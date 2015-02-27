@@ -162,6 +162,9 @@ class Users extends CActiveRecord
         public static function getName($id){           
             return self::model()->find("id=:id", array(':id'=>$id))->username;
         }
+        public static function getData($id){           
+            return self::model()->find("id=:id", array(':id'=>$id));
+        }
         public static function getUserType($username){           
             return self::model()->find("username=:username", array(':username'=>$username))->id_type_of_user;
         }

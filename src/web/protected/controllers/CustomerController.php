@@ -28,7 +28,7 @@ class CustomerController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','admin', 'error'),
+				'actions'=>array('index','view','admin', 'error','AddBike'),
 				'users'=>array('*'),
 			),
                         array('allow', // allow admin user to perform 'update' and 'delete' actions
@@ -59,7 +59,7 @@ class CustomerController extends Controller
 	public function actionView($id)
 	{
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$this->loadModel($id),'bikeCustomer'=>  BikeCustomer::bikeByCustomer($id),
 		));
 	}
 
@@ -79,7 +79,7 @@ class CustomerController extends Controller
                         $exist=Customer::getCustomerExist($_POST['Customer']['id_doc']);
                         if($exist==NULL)
                         {
-                                $model->attributes=$_POST['Customer'];
+                                $model->attributes=array_map('strtoupper',$_POST['Customer']);
                                 if($model->save())
                                         $this->redirect(array('view','id'=>$model->id));
                         }else{
@@ -109,7 +109,7 @@ class CustomerController extends Controller
 
 		if(isset($_POST['Customer']))
 		{
-			$model->attributes=$_POST['Customer'];
+			$model->attributes=array_map('strtoupper',$_POST['Customer']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -118,6 +118,46 @@ class CustomerController extends Controller
 			'model'=>$model,
 		));
 	}
+	public function actionAddBike($id)
+	{
+		$model=$this->loadModel($id);
+                
+		if(isset($_POST['Customer']))
+		{
+                        $form=$_POST['Customer'];
+                        $bikeDescription=  BikeDescription::checkExistByPlate($form["plate"]);
+                        if($bikeDescription==NULL){
+                            $bikeDescription= new BikeDescription();
+                            $this->registerBikeDescription($bikeDescription, $form);
+                        }else{
+                            $this->registerBikeDescription($bikeDescription, $form);
+                            $bikeCustomer=  BikeCustomer::checkRelation($bikeDescription->id);
+                            if($bikeCustomer!=NULL){
+                                $bikeCustomer->end_date=date("Y-m-d");
+                            }
+                        }
+                        $newBikeCustomer= new BikeCustomer();
+                        $newBikeCustomer->id_customer=$model->id;
+                        $newBikeCustomer->id_bike_description=$bikeDescription->id;
+                        $newBikeCustomer->start_date=date("Y-m-d");
+
+			if($newBikeCustomer->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('addBike',array(
+			'model'=>$model,
+		));
+	}
+        public function registerBikeDescription($bikeDescription, $form)
+        {
+            $bikeDescription->id_brand_bike=strtoupper($form["id_brand_bike"]);
+            $bikeDescription->id_model_bike=strtoupper($form["id_model_bike"]);
+            $bikeDescription->id_colour=strtoupper($form["id_colour"]);
+            $bikeDescription->plate=strtoupper($form["plate"]);
+            $bikeDescription->year_bike=$form["year_bike"];
+            $bikeDescription->save();
+        }
 
 	/**
 	 * Deletes a particular model.

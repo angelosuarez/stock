@@ -7,7 +7,7 @@ $this->breadcrumbs=array(
 	'Error',
 );
 ?>
-<div  class="alert alert-warning in fade">
+<div  class="alert alert-danger in fade">
     <h2>Error <?php echo $code; ?></h2>
 
     <div class="error">
