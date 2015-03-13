@@ -183,9 +183,9 @@ class ProductController extends Controller
 	{
             $params=array();
             $params["brand"]=$params["model"]=$params["stock"]=$params["price"]=" - ";
-            if(isset($_GET["BikeCustomer"]["id_product"]))
+            if(isset($_GET["BikeCustomer"]["id_product"]) || isset($_GET["Customer"]["id_product"]))
             {
-                $productId=$_GET["BikeCustomer"]["id_product"];
+                $productId=$_GET["BikeCustomer"]["id_product"]=$_GET["Customer"]["id_product"];
                 $detailProduct=Product::getData($productId);
                 $params["brand"]=$detailProduct->brand;
                 $params["model"]=$detailProduct->model;

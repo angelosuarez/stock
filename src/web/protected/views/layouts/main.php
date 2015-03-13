@@ -32,7 +32,7 @@
 
             $this->widget('bootstrap.widgets.TbNavbar',array(
                 'type'=>'inverse',
-                'brand'=>'SALES',
+                'brand'=>CHtml::encode(Yii::app()->name),
                 'brandUrl'=>'/site/index',
                 'collapse'=>true,
                 

@@ -12,7 +12,7 @@ return array(
 	'charset' => 'utf8',
 	*/
     
-                'connectionString'=>'pgsql:host=localhost;port=5432;dbname=sales',
+                'connectionString'=>'pgsql:host=localhost;port=5432;dbname=vic_marcas',
                             'emulatePrepare'=>true,
                             'username'=>'postgres',
                             'password'=>'Ang123..-',

@@ -26,6 +26,11 @@ class Customer extends CActiveRecord
         public $year_bike;
         public $new_brand_bike;
         public $new_model_bike;
+        public $quantity;
+        public $id_product;
+        public $stock;
+        public $total_price;
+        public $start_date;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -86,6 +91,9 @@ class Customer extends CActiveRecord
 			'year_bike' => 'Año',
 			'new_brand_bike' => 'Nueva Marca',
 			'new_model_bike' => 'Nuevo Modelo',
+			'id_product' => 'Producto',
+			'quantity' => 'Cantidad',
+			'stock' => 'Inventario',
 		);
 	}
 
@@ -146,5 +154,29 @@ class Customer extends CActiveRecord
         public static function testing()
 	{
                 return self::model()->findAll();
+        }
+        public static function productByCustomer($customerId)
+        {
+            return ProductInvoice::model()->findAllBySql("select * from product_invoice where id_customer={$customerId} and id_invoice is null and end_date is null");
+        }
+        public static function openAccounts()
+	{
+            $sql="SELECT tt.*
+                  FROM
+                    (SELECT t.id AS id_customer, sum(t.total_price)AS total_price, min(t.start_date)AS start_date
+                     FROM
+                       (
+                        SELECT pi.id_customer AS id, pi.id_product,  (p.total_price * pi.quantity)AS total_price, start_date
+                        FROM customer c, product_invoice pi, product p
+                        WHERE 
+                              pi.id_customer=c.id
+                          AND pi.end_date IS NULL
+                          AND pi.id_invoice IS NULL
+                          AND p.id=pi.id_product
+                        )t
+                     GROUP BY  t.id
+                    )tt, customer tc
+                  WHERE tc.id=tt.id_customer ";
+                return ProductInvoice::model()->findAllBySql($sql);
         }
 }

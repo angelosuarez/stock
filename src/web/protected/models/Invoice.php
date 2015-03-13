@@ -33,11 +33,13 @@ class Invoice extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_bike_customer', 'numerical', 'integerOnly'=>true),
+			array('id_users', 'numerical', 'integerOnly'=>true),
+			array('invoice_number', 'length', 'max'=>50),
 			array('invoice_number', 'length', 'max'=>50),
 			array('now_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_bike_customer, now_date, invoice_number', 'safe', 'on'=>'search'),
+			array('id, id_bike_customer, now_date, invoice_number, cash, cash_point, id_users', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,6 +54,7 @@ class Invoice extends CActiveRecord
 			'serviceInvoices' => array(self::HAS_MANY, 'ServiceInvoice', 'id_invoice'),
 			'idBikeCustomer' => array(self::BELONGS_TO, 'BikeCustomer', 'id_bike_customer'),
 			'productInvoices' => array(self::HAS_MANY, 'ProductInvoice', 'id_invoice'),
+			'idUsers' => array(self::HAS_MANY, 'Users', 'id_users'),
 		);
 	}
 
@@ -65,6 +68,9 @@ class Invoice extends CActiveRecord
 			'id_bike_customer' => 'Id Bike Customer',
 			'now_date' => 'Now Date',
 			'invoice_number' => 'Invoice Number',
+			'cash' => 'Efectivo',
+			'cash_point' => 'Punto',
+			'id_users' => 'Usuario',
 		);
 	}
 
@@ -90,6 +96,9 @@ class Invoice extends CActiveRecord
 		$criteria->compare('id_bike_customer',$this->id_bike_customer);
 		$criteria->compare('now_date',$this->now_date,true);
 		$criteria->compare('invoice_number',$this->invoice_number,true);
+		$criteria->compare('cash',$this->cash,true);
+		$criteria->compare('cash_point',$this->cash_point,true);
+		$criteria->compare('id_users',$this->id_users,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

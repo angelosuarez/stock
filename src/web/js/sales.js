@@ -102,7 +102,7 @@ $SALES.UI=(function()
         function _changeElement() 
         {
             $('select#BikeDescription_id_brand_bike, select#Customer_id_brand_bike, input#Product_price,input#Product_total_price,input#Service_price,input#Service_total_price, div#customer_existence input#Customer_id_doc, \n\
-               input#Users_confirm_new_password, #BikeCustomer_id_product, #BikeCustomer_quantity').change(function()
+               input#Users_confirm_new_password, #BikeCustomer_id_product, #BikeCustomer_quantity, #Customer_id_product, #Customer_quantity').change(function()
             {
                 console.log($(this).val());
                 switch ($(this).attr("id"))
@@ -132,11 +132,11 @@ $SALES.UI=(function()
                     case "BikeDescription_id_brand_bike": case "Customer_id_brand_bike":         
                         $SALES.AJAX.send("GET","/ModelBike/GetModelForBrand",$(this).serialize(),$(this).attr("id"));
                         break;
-                    case "BikeCustomer_id_product":         
+                    case "BikeCustomer_id_product": case "Customer_id_product":         
                         $SALES.AJAX.send("GET","/Product/GetDataById",$(this).serialize(),$(this).attr("id"));
                         break;
-                    case "BikeCustomer_quantity":  
-                        if( $(this).val() <= $("#BikeCustomer_stock").val() )
+                    case "BikeCustomer_quantity":   case "Customer_quantity":  
+                        if( $(this).val() <= $("#BikeCustomer_stock, #Customer_stock").val() )
                         {
                             console.log("llegoooooooooo");
                             $("button.btn").removeAttr("disabled").removeClass("disabled");
@@ -263,11 +263,13 @@ $SALES.UI=(function()
                         console.log(data);
                         break;
                     case "BikeCustomer_id_product":
+                    case "Customer_id_product":
                         obj = JSON.parse(data);
                         $("#brand").html(obj.brand);
                         $("#model").html(obj.model);
                         $("#stock").html(obj.stock);
                         $("#BikeCustomer_stock").val(obj.stock);
+                        $("#Customer_stock").val(obj.stock);
                         $("#price").html(obj.price);
                         console.log(data);
                         break;

@@ -141,7 +141,7 @@ div.view
 {
 	padding: 10px;
         margin: 10px 0;
-        background: #F5F5F5;
+        background: #BEE4DF;
         display: -webkit-inline-box;
         transition: background;
         transition-duration: 1s;
@@ -150,7 +150,7 @@ div.view
 }
 div.view:hover
 {
-	background: #BEE4DF;
+	background: #F5F5F5;
         transition: background;
         transition-duration: 1.5s;
         border: solid 1px #9DC3BE;
@@ -324,7 +324,7 @@ div.search-form
 
 .operations li a:visited
 {
-	color: white;
+	/*color: white;*/
 }
 
 .operations li a:hover
@@ -437,6 +437,7 @@ div.table-descr table select
     text-align: center!important;
     font-weight: bold;
     font-size: larger;
+    color: green;
 }
 .total-account td
 {
@@ -454,7 +455,8 @@ div.table-descr table select
     margin: 0% -16%!important;
     height: inherit!important;
 }
-.to-payment
+
+.to-payment 
 {
     background: green!important;
     color: white!important;
@@ -462,11 +464,16 @@ div.table-descr table select
     display: inherit;
     padding: 8px;    
 }
+.to-payment a
+{
+    color: white!important;
+    text-decoration: none!important;
+}
 .to-payment:hover
 {
-    background: white!important;
-    color: green!important;    
+    background: #66E894!important;
 }
+
 
 
 /*COLOR DE MOTOS*/
@@ -541,16 +548,27 @@ div.table-descr table select
 }
 /*FIN DE COLOR DE MOTOS*/
 
-button#createInvoice 
+button#createInvoice, button#addProduct 
 {
     width: 91%;
-    margin: 4% 0%;
+    margin: 1% 0%;
 }
 
 .account-null-note
 {
     color: #C3D9FF;
     text-align: center;
+}
+
+form#day-report-form .note textarea
+{
+    width: 100%;
+}
+
+form#day-report-form .note
+{
+    width: 52%;
+    margin: 0% 5.5% 0% 0%;
 }
 
 

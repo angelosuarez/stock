@@ -15,7 +15,7 @@
     -->
     <div class="col-sm-">
         <h1>Login</h1>
-        <p>Please fill out the following form with your login credentials:</p>
+        <p>Por favor, para ingresar, introduzca sus credenciales:</p>
         <div class="form">
         <?php $form=$this->beginWidget('CActiveForm', array(
                 'id'=>'login-form',
@@ -24,7 +24,7 @@
                         'validateOnSubmit'=>true,
                 ),
         )); ?>
-            <p class="note">Fields with <span class="required">*</span> are required.</p>
+            <p class="note">campos con <span class="required">*</span> son obligatorios.</p>
             <div class="row">
                     <?php echo $form->labelEx($model,'username'); ?>
                     <?php echo $form->textField($model,'username'); ?>

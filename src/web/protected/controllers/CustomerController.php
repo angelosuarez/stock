@@ -28,7 +28,7 @@ class CustomerController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','admin', 'error','AddBike'),
+				'actions'=>array('index','view','admin', 'error','AddBike','newProduct'),
 				'users'=>array('*'),
 			),
                         array('allow', // allow admin user to perform 'update' and 'delete' actions
@@ -59,7 +59,7 @@ class CustomerController extends Controller
 	public function actionView($id)
 	{
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),'bikeCustomer'=>  BikeCustomer::bikeByCustomer($id),
+			'model'=>$this->loadModel($id),'productByCustomer'=>  Customer::productByCustomer($id), "typeUser"=>Users::getData(Yii::app()->user->id)->id_type_of_user,
 		));
 	}
 
@@ -118,6 +118,40 @@ class CustomerController extends Controller
 			'model'=>$model,
 		));
 	}
+        
+        public function actionNewProduct($id)
+	{
+		$model=$this->loadModel($id);
+                
+		if(isset($_POST['Customer']))
+		{
+                        $form=$_POST['Customer'];
+                        $CustId=$form ["id"];
+                        $productId=$form ["id_product"];
+                        $quantity=$form ["quantity"];
+                        
+                        $productByCustomer= ProductInvoice::checkExist($productId, $CustId);
+                        if($productByCustomer==NULL){
+                            $productByCustomer= new ProductInvoice();
+                            $productByCustomer->id_customer=$CustId;
+                            $productByCustomer->id_product=$productId;
+                            $productByCustomer->start_date=date("Y-m-d");
+                            $productByCustomer->quantity=$quantity;
+                        }else{
+                            $productByCustomer->quantity=$productByCustomer->quantity + $quantity;
+                        }
+                        $products=Product::getData($productId);
+                        $products->quantity=abs($products->quantity - $quantity);
+
+			$productByCustomer->save(FALSE);
+                        $products->save();
+                        $this->redirect(array('view','id'=>$model->id));
+		}
+		$this->render('newProduct',array(
+			'model'=>$model,
+		));
+	}
+        
 	public function actionAddBike($id)
 	{
 		$model=$this->loadModel($id);
@@ -178,10 +212,14 @@ class CustomerController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Customer');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+//		$dataProvider=new CActiveDataProvider('Customer');
+//		$this->render('index',array(
+//			'dataProvider'=>$dataProvider,
+//		));
+                $dataProvider=Customer::openAccounts();
+                $this->render('index',array(
+                    'dataProvider'=>$dataProvider,
+                ));
 	}
 
 	/**

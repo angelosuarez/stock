@@ -12,8 +12,7 @@ $this->menu=array(
 ?>
 
 <h3>Actualizacion de producto para:</h3>
-<h1> <?php echo $model->idBikeCustomer->idCustomer->name; ?> y su 
-     <?php echo $model->idBikeCustomer->idBikeDescription->idBrandBike->name; ?>
+<h1> <?php echo $model->idCustomer->name."".$model->idCustomer->last_name; ?> 
 </h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

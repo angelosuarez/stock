@@ -12,9 +12,20 @@ $this->menu=array(
 );
 ?>
 
-<h1>Clientes</h1>
-
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+<h1>Cuentas Abiertas</h1>
+<div class='forany-view open-accounts'>
+    <?php 
+    if($dataProvider!=NULL)
+    {
+        foreach ($dataProvider as $key => $accounts) 
+        {
+            echo $this->renderPartial('_view',array(
+                                'data'=>$accounts,
+                        ));
+        }
+    }else{
+        echo "<h1 class='account-null-note'>No hay Cuentas Abiertas...</h1>";
+    }
+    
+    ?>
+</div>

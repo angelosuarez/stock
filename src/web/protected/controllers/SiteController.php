@@ -31,7 +31,11 @@ class SiteController extends Controller
         // using the default layout 'protected/views/layouts/main.php'
         if(!Yii::app()->user->isGuest)
         {
-            $this->render('index');
+            if(Customer::openAccounts()!=NULL)
+                 $this->redirect('/Customer/index/');
+            else
+                $this->render('index');
+           
         }
         else
         {
@@ -148,17 +152,22 @@ class SiteController extends Controller
                         break;
                 }
                 /*ITEMS COMUNES PARA TODOS LOS USUARIOS*/
-                array_push($return, array('label' => 'Inventario', 
-                                      'url' => '#', 
-                                      'items' =>array(
-                                                    array('label' => 'Productos', 'url' => '/product/admin'), //'visible'=>$admin),
-                                                    array('label' => 'Proveedores', 'url' => '/supplier/admin'),
-                                                )
-                                ));
                 
-                array_push($return, array('label' => 'Servicios', 'url' => '/service/admin'));
+//                array_push($return, array('label' => 'Inventario', 
+//                                      'url' => '#', 
+//                                      'items' =>array(
+//                                                    array('label' => 'Productos', 'url' => '/product/admin'), //'visible'=>$admin),
+//                                                    array('label' => 'Proveedores', 'url' => '/supplier/admin'),
+//                                                )
+//                                ));
+                array_push($return, array('label' => 'Productos',  'url' => '/product/admin',  ));
+                array_push($return, array('label' => 'Proveedores',  'url' => '/supplier/admin',  ));
+                
+//                array_push($return, array('label' => 'Servicios', 'url' => '/service/admin'));
                 array_push($return, array('label' => 'Clientes', 'url' => '/customer/admin'));
-                array_push($return, array('label' => 'Cuentas Abiertas', 'url' => '/bikeCustomer/index'));
+                array_push($return, array('label' => 'Cuentas', 'url' => '/Customer/index'));
+                array_push($return, array('label' => 'Reporte Diario', 'url' => '/dayReport/create'));
+                
 //                array_push($return, array('label' => 'Servicios', 
 //                                      'url' => '#', 
 //                                      'items' =>array(
